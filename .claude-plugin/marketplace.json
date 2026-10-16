@@ -1,0 +1,15 @@
+{
+  "name": "dayboard",
+  "owner": {
+    "name": "Maksym Skuibida"
+  },
+  "description": "AI-DLC process plugins used in the Dayboard workspace.",
+  "plugins": [
+    {
+      "name": "question-forms",
+      "source": "./aidlc-plugins/question-forms",
+      "description": "Every AI-DLC questions file as a form in one private artifact, plus text-only questions and board forms; answers copied word for word into the file.",
+      "version": "1.3.2"
+    }
+  ]
+}
