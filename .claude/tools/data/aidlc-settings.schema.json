@@ -192,6 +192,9 @@
         "hookDebug": {
           "type": "boolean"
         },
+        "pullRequestApproval": {
+          "type": "boolean"
+        },
         "sensorTimeoutMs": {
           "type": "integer",
           "minimum": 1
