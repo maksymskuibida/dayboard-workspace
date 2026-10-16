@@ -355,7 +355,7 @@ rebase and `aidlc unit land <unit> --refold`, which re-runs the fold on the
 rebased branch. Pull requests may be opened from the Unit's branch only, never
 from the claim ref. Once the pull request is merged, `aidlc unit finish <unit>`
 in the same checkout verifies that `main` carries exactly the head land left
-behind, ends the checkout's scope, and either returns a main checkout to the
+behind, deletes the Unit's claim ref, ends the checkout's scope, and either returns a main checkout to the
 integration branch (then `next` picks the next Unit) or hands a worktree the
 one command that removes it. Content merged after land is refused until a
 person inspects it and accepts it with `--accept-merged-drift --user-input

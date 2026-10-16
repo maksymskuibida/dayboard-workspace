@@ -4610,6 +4610,25 @@ function finishUnit(args: string[], projectDir?: string): void {
     };
     writeUnitMergeTransaction(pd, transaction);
   }
+  // The claim ref has nothing left to do once main carries the Unit: the
+  // merged pull request, the audit rows and the journal are the record, and a
+  // stale checkout still fails closed, with no live claim to publish or pin
+  // against. Deleting it keeps the branch list to the work in flight.
+  let claimRefDeleted = false;
+  let claimRefNote: string | null = null;
+  if (integration.remote) {
+    const claimRefName = transaction.claim_ref;
+    if (refTip(pd, integration.remote, claimRefName) === null) {
+      claimRefDeleted = true;
+    } else {
+      const deleted = git(pd, ["push", integration.remote, "--delete", claimRefName]);
+      claimRefDeleted = deleted.ok;
+      if (!deleted.ok) {
+        claimRefNote = `${claimRefName} was not deleted from ${integration.remote}: ${deleted.stderr.trim()}`;
+      }
+    }
+    invalidateLiveClaimPayloadCache(pd, unit);
+  }
   closeCheckoutScope(pd, unitBranch, {
     finished: true,
     unit,
@@ -4618,6 +4637,8 @@ function finishUnit(args: string[], projectDir?: string): void {
     merge_commit: mergeCommit,
     drift,
     follow_up: followUp?.url ?? null,
+    claim_ref_deleted: claimRefDeleted,
+    ...(claimRefNote ? { claim_ref_note: claimRefNote } : {}),
   });
 }
 
