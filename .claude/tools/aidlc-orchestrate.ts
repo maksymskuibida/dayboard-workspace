@@ -253,7 +253,6 @@ import {
   noteProjectTypeAsked,
   constructionStaffingPassedOver,
   noteConstructionStaffingAsked,
-  teamsAcrossReposLine,
   isRefusedModifierNextArgv,
   isRetiredOnlyNextArgv,
   isRegularFile,
@@ -3830,11 +3829,6 @@ function constructionStaffingAsk(
     return null;
   }
   const order = readConstructionIteration(stateContent) === "unit-major" ? "one after another" : "stage by stage";
-  const repos = intentRepos(projectDir);
-  if (repos.length > 0) {
-    if (speaks) sayWithStepOnce(projectDir, teamsAcrossReposLine(repos.length, units));
-    return null;
-  }
   if (constructionStaffingPassedOver(projectDir)) {
     if (speaks) {
       sayWithStepOnce(
@@ -4067,7 +4061,7 @@ function initialUnitProgressSection(
         stages.map(() => "[ ]").join(" | ")
       } | [ ] |${
         mergeTracking
-          ? ` ${transaction?.status === "complete" ? "[x]" : "[ ]"} |`
+          ? ` ${transaction?.status === "complete" || transaction?.status === "finished" ? "[x]" : "[ ]"} |`
           : ""
       }`;
     }),
@@ -4123,7 +4117,7 @@ function assembleTeamConstructionBoard(
       observedActivity: observedClaimActivity(claim),
     }));
   const awaitingMerge = transactions
-    .filter((transaction) => transaction.status !== "complete")
+    .filter((transaction) => transaction.status !== "complete" && transaction.status !== "finished")
     .sort((a, b) => compareBoardKeys(a.unit, b.unit))
     .map((transaction) => ({
       unit: transaction.unit,

@@ -1,4 +1,5 @@
-import { type Dirent, existsSync, lstatSync, readFileSync, readdirSync, statSync } from "node:fs";
+import { spawnSync } from "node:child_process";
+import { type Dirent, existsSync, lstatSync, readFileSync, readdirSync, realpathSync, statSync } from "node:fs";
 import { basename, dirname, isAbsolute, join, relative, resolve, sep } from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -316,11 +317,42 @@ function explicitRuntimeProjectDir(): string | null {
       ? argv[index + 1]
       : resolve(process.cwd(), argv[index + 1]);
   }
-  const explicit = process.env.AIDLC_PROJECT_DIR ??
-    process.env.CLAUDE_PROJECT_DIR ?? process.env.KIRO_PROJECT_DIR;
-  return explicit
-    ? isAbsolute(explicit) ? explicit : resolve(process.cwd(), explicit)
-    : null;
+  const own = process.env.AIDLC_PROJECT_DIR;
+  if (own) return isAbsolute(own) ? own : resolve(process.cwd(), own);
+  const host = process.env.CLAUDE_PROJECT_DIR ?? process.env.KIRO_PROJECT_DIR;
+  if (!host) return null;
+  const hostDir = isAbsolute(host) ? host : resolve(process.cwd(), host);
+  return hostWorktreeProjectDir(hostDir) ?? hostDir;
+}
+
+// A host that opens a session in a git worktree of the project may still name
+// the main checkout as the project (Claude Code's desktop app sets
+// CLAUDE_PROJECT_DIR that way). The hooks then run with the worktree as their
+// working directory but act on the main checkout: its record, its audit, its
+// claim stamp. When the working directory is inside a different checkout that
+// holds the AI-DLC workspace shell itself, that checkout is the project.
+export function hostWorktreeProjectDir(hostDir: string): string | null {
+  const top = spawnSync("git", ["rev-parse", "--show-toplevel"], {
+    cwd: process.cwd(),
+    encoding: "utf-8",
+    stdio: ["ignore", "pipe", "ignore"],
+  });
+  if (top.status !== 0) return null;
+  const cwdTop = (top.stdout ?? "").trim();
+  if (!cwdTop || samePath(cwdTop, hostDir)) return null;
+  if (!existsSync(join(cwdTop, "aidlc"))) return null;
+  return discoverProjectHarnesses(cwdTop).length > 0 ? cwdTop : null;
+}
+
+function samePath(left: string, right: string): boolean {
+  const real = (path: string): string => {
+    try {
+      return realpathSync(path);
+    } catch {
+      return resolve(path);
+    }
+  };
+  return real(left) === real(right);
 }
 
 export function runtimeProjectDir(): string {

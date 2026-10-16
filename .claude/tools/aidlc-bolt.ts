@@ -1158,9 +1158,9 @@ function handleDispatchEvent(args: string[]): void {
       return;
     }
     case "MERGE_DISPATCH_RETURNED": {
-      if (!flags.strategy) error("MERGE_DISPATCH_RETURNED requires --strategy <squash|merge|rebase>");
-      if (!["squash", "merge", "rebase"].includes(flags.strategy)) {
-        error(`Invalid --strategy: ${flags.strategy}. Must be squash, merge, or rebase.`);
+      if (!flags.strategy) error("MERGE_DISPATCH_RETURNED requires --strategy <squash|merge|rebase|pr>");
+      if (!["squash", "merge", "rebase", "pr"].includes(flags.strategy)) {
+        error(`Invalid --strategy: ${flags.strategy}. Must be squash, merge, rebase, or pr.`);
       }
       if (!flags.target) error("MERGE_DISPATCH_RETURNED requires --target <branch>");
       if (!flags.confidence) error("MERGE_DISPATCH_RETURNED requires --confidence <0-1>");

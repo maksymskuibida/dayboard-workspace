@@ -487,6 +487,7 @@ const CONFIG_VALUE_FLAGS = new Set([
   "--question-retention-days",
   "--swarm",
   "--hook-debug",
+  "--pull-request-approval",
   "--bypass",
   "--clear-bypass",
   "--writing-up-effort",
@@ -500,6 +501,7 @@ const CHOICE_VALUE_FLAGS = new Set([
   "--from",
   "--harness",
   "--hook-debug",
+  "--pull-request-approval",
   "--mcp",
   "--plan-token",
   "--plugins",
@@ -3243,6 +3245,7 @@ function validateChoiceArgs(
         "--hook-debug",
         "--plan-token",
         "--project-dir",
+        "--pull-request-approval",
         "--sensor-timeout-ms",
         "--question-retention-days",
         "--swarm",
@@ -3284,6 +3287,7 @@ function validateChoiceArgs(
         "--clear-bypass",
         "--default-scope",
         "--hook-debug",
+        "--pull-request-approval",
         "--reset",
         "--sensor-timeout-ms",
         "--question-retention-days",
@@ -3303,6 +3307,7 @@ function choiceHelp(section: ChoiceSection): string {
         "  --default-scope <installed-scope>",
         "  --swarm <on|off>",
         "  --hook-debug <on|off>",
+        "  --pull-request-approval <on|off>   strategy pr: the Unit's code pull requests must be approved on GitHub (off records the approvers it finds)",
         "  --sensor-timeout-ms <positive-integer>",
         "  --question-retention-days <days|unlimited>",
         "  --bypass <AIDLC_SKIP_*|AIDLC_DISABLE_*>",
@@ -3412,6 +3417,8 @@ function buildFlagsRecord(
   if (swarm !== undefined) next.swarm = swarm;
   const hookDebug = parseOnOff(valueAfter(argv, "--hook-debug"), "--hook-debug");
   if (hookDebug !== undefined) next.hookDebug = hookDebug;
+  const pullRequestApproval = parseOnOff(valueAfter(argv, "--pull-request-approval"), "--pull-request-approval");
+  if (pullRequestApproval !== undefined) next.pullRequestApproval = pullRequestApproval;
   const timeout = valueAfter(argv, "--sensor-timeout-ms");
   if (timeout !== undefined) {
     const parsed = Number(timeout);
@@ -3532,6 +3539,7 @@ function showChoiceSection(
       ["AWS_AIDLC_DEFAULT_SCOPE", "defaultScope"],
       ["AIDLC_USE_SWARM", "swarm"],
       ["AIDLC_HOOK_DEBUG", "hookDebug"],
+      ["AIDLC_PR_REQUIRE_APPROVAL", "pullRequestApproval"],
       ["AIDLC_SENSOR_TIMEOUT_MS", "sensorTimeoutMs"],
       ["AIDLC_QUESTION_RETENTION_DAYS", "questionRetentionDays"],
     ].map(([envName, field]) => [
@@ -3640,6 +3648,9 @@ function showChoiceSection(
     output += `  Hook debug: ${
       effectiveBoolean("AIDLC_HOOK_DEBUG", resolved.flags?.hookDebug)
     } ${sourceLabel("AIDLC_HOOK_DEBUG")}\n`;
+    output += `  Pull request approval: ${
+      effectiveBoolean("AIDLC_PR_REQUIRE_APPROVAL", resolved.flags?.pullRequestApproval)
+    } ${sourceLabel("AIDLC_PR_REQUIRE_APPROVAL")}\n`;
     output += `  Sensor timeout: ${
       sources.AIDLC_SENSOR_TIMEOUT_MS === "env"
         ? effective.AIDLC_SENSOR_TIMEOUT_MS ?? "inherit"
@@ -3750,6 +3761,7 @@ function choiceWizard(
     for (const [flag, label] of [
       ["--swarm", "Swarm"],
       ["--hook-debug", "Hook debug"],
+      ["--pull-request-approval", "Pull request approval"],
     ] as const) {
       const answer = configPrompt(`${label} [on/off, Enter keep]:`)?.trim();
       if (answer) args.push(flag, answer);
@@ -3847,6 +3859,7 @@ function prepareChoiceSection(
         "--clear-bypass",
         "--default-scope",
         "--hook-debug",
+        "--pull-request-approval",
         "--reset",
         "--sensor-timeout-ms",
         "--question-retention-days",
@@ -3956,7 +3969,7 @@ function prepareChoiceSection(
   } else {
     if (!configInputIsTty()) {
       const flags = section === "flags"
-        ? "--default-scope, --swarm, --hook-debug, --sensor-timeout-ms, --question-retention-days, --bypass, or --reset"
+        ? "--default-scope, --swarm, --hook-debug, --pull-request-approval, --sensor-timeout-ms, --question-retention-days, --bypass, or --reset"
         : "--plugins, --mcp, --completions, or --reset";
       emitResult(
         usage(
@@ -10892,6 +10905,7 @@ function handleSettingsOnlySection(
     "--clear-bypass",
     "--default-scope",
     "--hook-debug",
+    "--pull-request-approval",
     "--reset",
     "--sensor-timeout-ms",
     "--question-retention-days",
@@ -11125,13 +11139,14 @@ type SettingLeaf = {
 };
 
 const FLAG_LEAVES: ReadonlyArray<{
-  key: "defaultScope" | "swarm" | "hookDebug" | "sensorTimeoutMs" | "questionRetentionDays";
+  key: "defaultScope" | "swarm" | "hookDebug" | "pullRequestApproval" | "sensorTimeoutMs" | "questionRetentionDays";
   label: string;
   flag: string;
 }> = [
   { key: "defaultScope", label: "default scope", flag: "--default-scope" },
   { key: "swarm", label: "swarm", flag: "--swarm" },
   { key: "hookDebug", label: "hook debug", flag: "--hook-debug" },
+  { key: "pullRequestApproval", label: "pull request approval", flag: "--pull-request-approval" },
   { key: "sensorTimeoutMs", label: "sensor timeout (ms)", flag: "--sensor-timeout-ms" },
   { key: "questionRetentionDays", label: "question retention (days)", flag: "--question-retention-days" },
 ];
@@ -11391,6 +11406,7 @@ function recordChangeLines(projectDir: string, context: DiagnosticsMutationConte
 // --from loads it.
 const RIGHT_AWAY_FLAGS = new Map([
   ["flags.hookDebug", "hook debug"],
+  ["flags.pullRequestApproval", "pull request approval"],
   ["flags.sensorTimeoutMs", "the sensor timeout"],
   ["flags.questionRetentionDays", "question retention"],
 ]);

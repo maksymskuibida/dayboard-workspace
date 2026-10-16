@@ -76,7 +76,7 @@
       "sha256:a3a81d7437494d750dcf9bfa304ff2816858752c34e2e0f19f1606e008597ae3"
     ],
     ".claude/aidlc-common/protocols/stage-protocol-construction.md": [
-      "sha256:595bc300794a05c3c4e20d560982083149cbf6464b14c45ffab903752b633fc0"
+      "sha256:fe15e0770a4cab726d8c34ab56aee6b8e97434ec77ed8aac46d13a1b34d390e5"
     ],
     ".claude/aidlc-common/protocols/stage-protocol-ensemble.md": [
       "sha256:16eb57f8773349ed13c4914a9dcda4e3de432806b10dff06ed96a2e0e2976ac7"
@@ -214,7 +214,7 @@
       "sha256:72ed24b1dd9a07229cc6fef48bcad3685d7b34d6c30d142da5210257ab039d8f"
     ],
     ".claude/knowledge/aidlc-shared/audit-format.md": [
-      "sha256:5ff3218d02fd2206e8152b18afa77368efa8775655b8912c7b99542bae9ad0f9"
+      "sha256:d97f483f5e5e3b7885885879f3f375067c83d39a83bfcc467c1478e5af6a7bd8"
     ],
     ".claude/knowledge/aidlc-shared/state-template.md": [
       "sha256:69c35b53aea252817ad945cde84191cb6341666b2ad3c91d5717d22093a4fa59"
@@ -376,7 +376,7 @@
       "sha256:8fbefe48675c1aa616fdc31fe089b0be229bea41cb8b331e3fa8ec24a437c36f"
     ],
     ".claude/tools/aidlc-runtime-paths.ts": [
-      "sha256:ba2a6b3d06db6b40d66ca96770edd067143d0e894fc7fcea73f992777aa80bf8"
+      "sha256:aba995ec8ecbc2f9256941367e77b2011ad1b015ed3949a3858d177fc642dc2a"
     ],
     ".claude/tools/aidlc-utility.ts": [
       "sha256:5e56f9e8ceb094a290b2f5552b771f8ed912ac058203ce67e692281b3898d169"
