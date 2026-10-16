@@ -246,7 +246,7 @@
     ".claude/tools/aidlc-knowledge.ts": "sha256:472e56ef9e75ee4fe772cc39f949a6c70d77811a6ac2ea7b9a72bd95477a1075",
     ".claude/tools/aidlc-learnings.ts": "sha256:861c532d1d3f9805dadaef1acb649a0ce1c9fb3ad5c2b18d8df43ad618012cd0",
     ".claude/tools/aidlc-lib.ts": "sha256:6ae0cdc5031e078be0b87b1143a3f0d0ac867ae80ddcb6b53e812a762f57411f",
-    ".claude/tools/aidlc-lifecycle.ts": "sha256:df152020ec2f973bbb3d3b7c2d00696c709f44f39d1862a886afbb5668dd1d19",
+    ".claude/tools/aidlc-lifecycle.ts": "sha256:d8587a4c5aba5111d7409dd01f0d91420ba6317aa453c429568b43a9a10ed4b7",
     ".claude/tools/aidlc-log.ts": "sha256:992d9ddf3949123a5dad730c5af40e6bdc83768798c8c77f68ea6b645585c5f7",
     ".claude/tools/aidlc-machine-config.ts": "sha256:cc83e81e33f82cb461c6e07ab8f87498dc209f8da7f3ee393ce472562ce2e85f",
     ".claude/tools/aidlc-message-store.ts": "sha256:7042cb2e2aaa060d0d2ec956eda2b6760e1bf2532034cf5c0294903aac7a905a",
