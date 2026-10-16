@@ -96,6 +96,10 @@ Teams that have invested in test coverage and observability sometimes
 graduate to continuous deployment to production (every commit
 auto-deploys); that's a team decision, not a framework default.
 
+A project that runs only on its users' own machines, with no staging or
+production environment yet, deploys nothing: merged to `main` counts as
+released. The rules above apply from the moment such an environment exists.
+
 ## Code Style
 
 We defer to project-level configurations:
