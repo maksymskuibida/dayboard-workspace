@@ -32,6 +32,7 @@ import {
   packagedDistributionRoot,
   discoverableRuntimeHarnessDir,
   runtimeHarnessDir,
+  hookSessionProjectDir,
   hostWorktreeProjectDir,
   runtimeProjectDir,
   runtimeHarnessName,
@@ -1210,7 +1211,7 @@ export const ROUTES: readonly Route[] = [
 
 export type Action =
   | { type: "delegate"; tool: string; args: string[] }
-  | { type: "hook"; name: string; path: string; projectDir?: string }
+  | { type: "hook"; name: string; path: string; projectDir?: string; hostResolved?: boolean }
   | {
     type: "hook-group";
     name: string;
@@ -2354,6 +2355,10 @@ function resolveActionFrom(
     // directory it launched the command in. The statusline and the adapters
     // resolve a project from their host first and hand it to what they run.
     action.projectDir = dispatcherProjectDirFrom(argv, limit);
+    if (action.type === "hook") {
+      action.hostResolved =
+        !projectDirFlag(argv.slice(0, limit)).value && !process.env.AIDLC_PROJECT_DIR;
+    }
   }
   if (action.type === "delegate") {
     const delimiter = action.args.indexOf("--");
@@ -3032,7 +3037,12 @@ async function execute(action: Action): Promise<number> {
     return 0;
   }
   if (action.type === "hook") {
-    return await withProjectDir(action.projectDir, () => runHook(action));
+    // A host may run a worktree session's hook from the main checkout it names
+    // as the project; the payload says where the session really works.
+    const projectDir = action.hostResolved && action.projectDir
+      ? hookSessionProjectDir(action.projectDir, await readStdin())
+      : action.projectDir;
+    return await withProjectDir(projectDir, () => runHook({ ...action, projectDir }));
   }
   if (action.type === "hook-group") {
     return await withProjectDir(action.projectDir, () => runHookGroup(action));
