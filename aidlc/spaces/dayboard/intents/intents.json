@@ -1,0 +1,14 @@
+[
+  {
+    "uuid": "01a145a3-19be-716a-8b04-32b5dc65032d",
+    "slug": "daily-page-mvp",
+    "dirName": "261016-daily-page-mvp",
+    "scope": "mvp",
+    "repos": [
+      "dayboard-api",
+      "dayboard-web"
+    ],
+    "status": "in-flight",
+    "request": "3953f6c3"
+  }
+]
