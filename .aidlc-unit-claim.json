@@ -1,0 +1,17 @@
+{
+  "version": 1,
+  "status": "claimed",
+  "owner": "A",
+  "space": "dayboard",
+  "intent_uuid": "01a145a3-19be-716a-8b04-32b5dc65032d",
+  "intent_id8": "dc65032d",
+  "unit": "u1-api-core",
+  "generation": 1,
+  "nonce": "c8e9e037-263a-439c-b1c0-f508ec4118a6",
+  "base_oid": "bf0cd0ad7bd0116f4be87f225e8c25bab97cd42f",
+  "integration_ref": "refs/remotes/origin/main",
+  "claim_ref": "refs/heads/claim/dc65032d/u1-api-core",
+  "predecessor_oid": null,
+  "gate_rhythm": "per-stage",
+  "audit_shard": "mac-fritz-box-7218249c7247.md"
+}
