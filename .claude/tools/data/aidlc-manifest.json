@@ -303,7 +303,7 @@
     ".claude/tools/aidlc-workspace-manifest.ts": "sha256:b9f12144f84e71a0f0e0647bf40768eb32f61654d824b4d57b0b20945e095f66",
     ".claude/tools/aidlc-workspace-sync.ts": "sha256:3d0ebeddeff74723870a3890c61f575010a757f55d66d3c32d85cc7a00a79ea2",
     ".claude/tools/aidlc-worktree.ts": "sha256:c9fefce0798a0a3e7457694744cee9c39221e8bd4d083df9716c8a1edef662c0",
-    ".claude/tools/aidlc.ts": "sha256:bfbf83edfa24672ec86c331ebb4d24582de740ee0ed8389516dd159a85107f3a",
+    ".claude/tools/aidlc.ts": "sha256:e58dc7605c8d63bb8f1e1e79046ea793b7847d7b63dbb844806d32db63785ebe",
     ".claude/tools/data/agent-tiers.json": "sha256:f975d2b878ed28ed9a3476bbad5e7972d36c35ed7c050f877e870114100ac02a",
     ".claude/tools/data/aidlc-projection.json": "sha256:4e5554308e54cada6317b23a6893e75d21bda201d1d078d640ecc9aff2f648c6",
     ".claude/tools/data/aidlc-settings.schema.json": "sha256:c83b2cff622067f4bdb625af7b6cfa488ab5ce3d60f5301dd52f34506b5f80c4",

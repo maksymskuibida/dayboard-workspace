@@ -1217,6 +1217,7 @@ export type Action =
     name: string;
     members: ReadonlyArray<HookGroupMember & { path: string }>;
     projectDir?: string;
+    hostResolved?: boolean;
   }
   | { type: "statusline"; path: string; projectDir?: string }
   | { type: "adapter"; harness: AdapterHarness; target: string; extraArgs: string[]; path: string; projectDir?: string }
@@ -2338,6 +2339,12 @@ function resolveActionFrom(
     } else if (action.type === "hook") {
       action.projectDir = absoluteProjectDir;
       action.path = resolveHookPath(`aidlc-${action.name}.ts`, undefined, absoluteProjectDir);
+    } else if (action.type === "hook-group") {
+      action.projectDir = absoluteProjectDir;
+      action.members = action.members.map((member) => ({
+        ...member,
+        path: resolveHookPath(`aidlc-${member.hook}.ts`, undefined, absoluteProjectDir),
+      }));
     } else if (action.type === "statusline") {
       action.projectDir = absoluteProjectDir;
       action.path = resolveHookPath("aidlc-statusline.ts", undefined, absoluteProjectDir);
@@ -2348,14 +2355,17 @@ function resolveActionFrom(
     } else if (action.type === "sensor-script-file") {
       action.projectDir = absoluteProjectDir;
     }
-  } else if (compiled && (action.type === "hook" || action.type === "sensor-script-file")) {
+  } else if (
+    compiled &&
+    (action.type === "hook" || action.type === "hook-group" || action.type === "sensor-script-file")
+  ) {
     // The compiled engine loads these modules from the runtime payload beside
     // the executable, so a module's own path names the install, never the
     // project. Pin the host's project: its project environment, else the
     // directory it launched the command in. The statusline and the adapters
     // resolve a project from their host first and hand it to what they run.
     action.projectDir = dispatcherProjectDirFrom(argv, limit);
-    if (action.type === "hook") {
+    if (action.type === "hook" || action.type === "hook-group") {
       action.hostResolved =
         !projectDirFlag(argv.slice(0, limit)).value && !process.env.AIDLC_PROJECT_DIR;
     }
@@ -3045,7 +3055,10 @@ async function execute(action: Action): Promise<number> {
     return await withProjectDir(projectDir, () => runHook({ ...action, projectDir }));
   }
   if (action.type === "hook-group") {
-    return await withProjectDir(action.projectDir, () => runHookGroup(action));
+    const projectDir = action.hostResolved && action.projectDir
+      ? hookSessionProjectDir(action.projectDir, await readStdin())
+      : action.projectDir;
+    return await withProjectDir(projectDir, () => runHookGroup({ ...action, projectDir }));
   }
   if (action.type === "statusline") {
     return await withProjectDir(action.projectDir, () => runStatusline(action));
