@@ -1,0 +1,44 @@
+## Review
+
+**Verdict:** READY
+**Reviewer:** aidlc-architecture-reviewer-agent
+**Date:** 2026-10-16T23:43:28Z
+**Iteration:** 1
+**Verdict Dictated:** no
+
+### Findings
+
+| ID | Severity | Location | Finding | Required action | Status |
+|---|---|---|---|---|---|
+| R-01 | Major | aidlc/spaces/dayboard/intents/261016-daily-page-mvp/inception/domain-design/components.md > McpInterface behaviour ("Can run in more than one process"), RequestGuard depends_on; decisions.md > ADR-007 Context | The design allows an assistant-started MCP process (the ADR-007 context and the Q9 answer both assume one), but RequestGuard only guards a request that reaches the backend and is handed to McpInterface. A second McpInterface process has no stated guard. If it speaks stdio there is no peer address, Host or Origin to check. If it listens on HTTP it needs a second port and its own RequestGuard. The Mandated privacy rules (FR8.3 to FR8.5, NFR1) are therefore unproven for exactly the multi-process case ADR-007 was added for. | State how the MCP server is reached when it runs in more than one process: either every MCP process embeds RequestGuard on its own loopback listener, or a stdio MCP process is explicitly outside the guard and why that is safe. Add the matching guard tests. Update the RequestGuard and McpInterface entries and ADR-006 to say which. | Resolved (reviewer) |
+| R-02 | Major | aidlc/spaces/dayboard/intents/261016-daily-page-mvp/inception/domain-design/components.md > DayPages behaviour and CarryOver behaviour; decisions.md > ADR-004 Consequences, ADR-002 Security | DayPages stores learningState and noteState but "leaves their transition rules to CarryOver" (FR1.7). Both interfaces also call DayPages directly to change items. Nothing makes a generic item change refuse a state-field write, so the assistant or page can set a learning from discarded back to unsaved through DayPages and skip CarryOver. ADR-004 relies on "the interfaces route those calls", while ADR-002 claims a rule "can't be skipped by calling through the other interface". The two ADRs contradict each other. | Choose one enforcement point. Either DayPages rejects any change to learningState or noteState that does not arrive through CarryOver, or the transition check sits where DayPages saves. Record the choice in ADR-004 and require a contract test for a direct state-field write. | Resolved (reviewer) |
+| R-03 | Minor | aidlc/spaces/dayboard/intents/261016-daily-page-mvp/inception/domain-design/components.md > Storage behaviour ("database's change counter"), LiveUpdates behaviour | "Change counter" is not defined. SQLite's data_version pragma only moves for writes by other connections, so LiveUpdates needs its own connection or must watch the DayChange sequence. The design does not say which. Journal mode, synchronous setting and busy-timeout handling when two processes contend are also unstated. Those settings bear on NFR5 (whole-or-nothing writes) and on the NFR2 300 ms bound. | Name the mechanism: poll the highest DayChange sequence, or use a separate connection with data_version. Record the journal mode, durability setting and the lock-wait and retry behaviour for contended writes. Fixing this in Functional Design or NFR Design is acceptable. | Resolved (reviewer) |
+| R-04 | Minor | aidlc/spaces/dayboard/intents/261016-daily-page-mvp/inception/domain-design/decisions.md > ADR-007 Consequences ("change log grows and needs trimming"); components.md > LiveUpdates ("catch-up from its last seen sequence") | A client that reconnects after the log was trimmed past its last sequence cannot be caught up, which breaks FR3.15's "show every change it missed". The first connect also has no starting sequence. | State the fallback: if the last seen sequence is older than the retained log, the stream tells the page to refresh the day list and the open day. State the starting sequence for a new stream. | Resolved (reviewer) |
+| R-05 | Minor | aidlc/spaces/dayboard/intents/261016-daily-page-mvp/inception/domain-design/components.md > LiveSync behaviour (toast "for changes not made in this tab") | A notice carries only the date and hash. The design does not say how this tab recognises its own write, for example by matching the hash returned from its own change. Without that, the person gets a "This day was updated" toast after every save. | Record that ApiClient reports the new hash of this tab's own changes to LiveSync, which suppresses the toast and highlight for a matching hash. | Resolved (reviewer) |
+| R-06 | Minor | aidlc/spaces/dayboard/intents/261016-daily-page-mvp/inception/domain-design/traceability.json > coverage US2.2, US3.3, US1.1 | Each story maps to a single component. US2.2 (see changes without reloading) points only at LiveUpdates, though the page-side behaviour sits in LiveSync and DayView. US3.3 (keep the page current as the assistant) points only at McpInterface, though the live path runs through DayPages and LiveUpdates. All stories do have a realizing component, so nothing is orphaned. | List the full set of realizing components, or add LiveSync for US2.2 and DayPages for US3.3, so a unit built from traceability does not miss them. | Resolved (reviewer) |
+| R-07 | Minor | aidlc/spaces/dayboard/intents/261016-daily-page-mvp/inception/domain-design/components.md > LiveSync and ApiClient behaviour (own-change matching) | The design does not say what happens when the day-changed notice reaches the tab before the change response has been processed, so the own hash is not recorded yet. The tab would then show a toast and highlight for its own save, which is the problem R-05 set out to remove. | Add one sentence that a notice is checked against the record only after the tab's pending change responses have settled, or that the hash is recorded when the change is sent. Functional Design can also carry this. | New |
+| R-08 | Minor | aidlc/spaces/dayboard/intents/261016-daily-page-mvp/inception/domain-design/components.md > Storage behaviour (schema version, backup copy, upgrades on start-up) | More than one process may start against the same data file (ADR-007), but start-up migration and the backup copy are described as if one process runs them. Two processes starting together, or an older process meeting a newer schema, could copy or migrate twice or write an old shape. | State that the migration runs inside a write transaction and that a process finding a newer schema version refuses to start. Functional Design can fix the detail. | New |
+| R-09 | Minor | aidlc/spaces/dayboard/intents/261016-daily-page-mvp/inception/domain-design/traceability.json > coverage targets | RequestGuard appears only in US1.1 and US1.2, although every web and stream story passes through it (US2.1, US2.2, US3.1, US3.2, US3.3, US4.1, US5.1). The lists are therefore uneven as a map of realizing components. | Add RequestGuard to the stories that cross it, or note that it is a cross-cutting guard for all of them. | New |
+
+> R-01 Reviewer note: RequestGuard behaviour and ADR-006 now require a guard in every listening process (HTTP MCP included) and explain why stdio needs none, with a test for the HTTP MCP case. McpInterface repeats the three run modes consistently.
+
+> R-02 Reviewer note: DayPages now checks note and learning transitions on every save; CarryOver holds only cross-day reads and adds. ADR-002, ADR-004, the CarryOver and DayPages behaviour text and the Rationale table agree.
+
+> R-03 Reviewer note: "Change counter" is now the highest DayChange sequence exposed by Storage. WAL, full durability and a bounded lock wait with a retryable refusal are stated in Storage and ADR-001.
+
+> R-04 Reviewer note: A new stream starts at the latest sequence; a reconnect older than the oldest kept change triggers a refresh of the list and the open day, in LiveUpdates, LiveSync and ADR-007.
+
+> R-05 Reviewer note: ApiClient records its own change hashes and LiveSync checks notices against them (components and ADR-007 agree). See the new race note below.
+
+> R-06 Reviewer note: Each story in traceability.json now lists several realizing components. See the new note on guard coverage below.
+
+### Validation Tool Results
+
+| Tool | Result | Interpretation |
+|---|---|---|
+| Manual catalogue check | PASS | Names are unique and every depends_on has a matching dependents entry. The graph is acyclic. Each entity has one owner. Infrastructure appears only as external dependencies. |
+| components.md and decisions.md consistency | PASS | ADR-001, 002, 004, 006 and 007 match the component behaviour text. The Q1 to Q9 choices are respected (Q1 SQLite behind storage, Q2 C, Q3 A, Q4 A, Q5 A, Q6 A, Q7 A, Q8 A, Q9 B). |
+
+### Summary
+
+All six prior findings are fixed. The catalogue is well-formed and consistent with the decisions and Q1 to Q9. The three new notes are minor and can be settled in later stages.

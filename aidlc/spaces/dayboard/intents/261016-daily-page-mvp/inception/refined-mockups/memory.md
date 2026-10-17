@@ -10,6 +10,8 @@
 <!-- example: 2026-05-29T10:14:32Z — skipped the optional caching layer the stage prose suggested; the dataset is small enough that it adds risk -->
 - 2026-10-16T21:33:32Z — Changed the approved requirements and stories during this stage (meeting times and answers, labels, past meetings, change cue), because the design answers changed behaviour, not only looks; the person confirmed that in the summary.
 
+- 2026-10-16T22:58:26Z — Drew the refined mockups as a Claude Design canvas on top of the written ones, after the person moved to an account with Design; the text wireframes stay the reference for behaviour and the canvas for the look, and the confirmation Remove button got its own solid danger token.
+
 ## Tradeoffs
 <!-- example: 2026-05-29T10:14:32Z — picked TDD over BDD this run; the team is unit-first and the domain is well-understood -->
 - 2026-10-16T21:33:32Z — Used system fonts and no web fonts for the liquid-glass look, to keep dependencies and page weight low; the glass surfaces and the type scale carry the style.
