@@ -13,6 +13,12 @@
 - During Construction, each Unit's records land with that Unit. `aidlc unit pr <unit>` opens the Unit's workspace pull request alongside its code pull requests. The project owner merges it before running `aidlc unit finish <unit>`. (Q2 clarification, Q11)
 - A pull request description says what the change is, what is in it and how to check it.
 
+- At every reviewer-backed approval, the findings are shown as a bullet list, each with its ID, severity and one plain sentence, never as a table. Findings already resolved or accepted come first in their own list, each starting with 'resolved' or 'accepted'; the open ones follow in a second list. After the list, the person is asked whether to put the open findings into a question form or continue; with a form, the approval question waits until every finding in it is answered. (learned 2026-10-17) <!-- cid:261016-daily-page-mvp:delivery-planning:282cee5163cf1c5d24151ec60b06900385a541aca348c2e1c53edcf596bae80f -->
+
+- Every revision made after review findings gets a fresh check by the reviewer before the approval question, every time, so nothing is approved that nobody re-checked. (learned 2026-10-17) <!-- cid:261016-daily-page-mvp:delivery-planning:85bfa6e01b3b98bb1cfc880011ff0a1e4d609ee902a22c67f0934f8a5b982630 -->
+
+- One Bolt for planning doesn't merge Units: each Unit still lands through its own pull requests and is finished on its own. (learned 2026-10-17) <!-- cid:261016-daily-page-mvp:delivery-planning:0eb3d9c0ae03318ece04fcbe8b6c2b5e1b6528094949882b409fc0f07328f221 -->
+
 ## Walking Skeleton
 
 - We never run a walking-skeleton ceremony for Dayboard. There is no thin end-to-end slice built first and no skeleton checkpoint. (Q3)
@@ -31,6 +37,8 @@
 - The privacy guard has its own tests from the first Unit: a request from another web origin is refused, a request from another machine is refused, and the day data location is ignored by git. (`ideation/feasibility/raid-log.md` R1, R2)
 - Test fixtures and examples contain only made-up content. (`ideation/feasibility/raid-log.md` R2; `ideation/feasibility/constraint-register.md` SC-04)
 - CI runs on every pull request in both code repositories. A failing test or a coverage drop below the floor blocks the merge. (Q5)
+
+- A verification command that skips a repository not set up yet uses `if … then … fi`, never a `|| not set up` fallback, so a failing check can never count as a pass. (learned 2026-10-17) <!-- cid:261016-daily-page-mvp:delivery-planning:2608668a9b305f272f15c73218b43e6396c555ede5701b0969e29583d4164144 -->
 
 ## Deployment
 

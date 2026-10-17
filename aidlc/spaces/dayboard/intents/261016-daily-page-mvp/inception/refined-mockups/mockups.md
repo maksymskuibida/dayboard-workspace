@@ -1,6 +1,6 @@
 # Refined Mockups — Dayboard, first version
 
-Annotated mid-to-high fidelity wireframes, refined from the rough wireframes (`ideation/rough-mockups/wireframes.md`) and the user flow (`ideation/rough-mockups/user-flow.md`) with the decisions in `refined-mockups-questions.md` (Q1 to Q9), the approved stories (`inception/user-stories/stories.md`) and requirements (`inception/requirements-analysis/requirements.md`). They are written the standard way, as text, by your choice (Q9). Components are specified in `interaction-spec.md`, tokens in `design-system-mapping.md`, and checks in `accessibility-checklist.md`. All content is made up.
+Annotated mid-to-high fidelity wireframes, refined from the rough wireframes (`ideation/rough-mockups/wireframes.md`) and the user flow (`ideation/rough-mockups/user-flow.md`) with the decisions in `refined-mockups-questions.md` (Q1 to Q9), the approved stories (`inception/user-stories/stories.md`) and requirements (`inception/requirements-analysis/requirements.md`). They were first written as text (Q9, "go standard"); on 2026-10-17 the visual design was added in Claude Design, as the summary allowed once the Design canvas was available (see Visual Design Canvas below). The text wireframes stay the reference for behaviour; the canvas is the reference for the look. Components are specified in `interaction-spec.md`, tokens in `design-system-mapping.md`, and checks in `accessibility-checklist.md`. All content is made up.
 
 ## Visual Direction
 
@@ -13,6 +13,20 @@ Annotated mid-to-high fidelity wireframes, refined from the rough wireframes (`i
 Rows stay tight: 32 px minimum row height on desktop, 44 px touch targets at phone width. Type steps are small: body 14 px, block heading 12 px small caps, date 22 px. When the system asks for reduced transparency, every glass level turns into a solid surface of the same colour, and the layout doesn't change. Light and dark are both glass; Auto follows the system (FR7.1).
 
 Legend for the drawings: `░` marks a glass surface, `( a | b | c )` a segmented control, `[ … ]` a button, `‹chip›` a status chip drawn by the page ("Past", "No answer"), `~` dimmed text. Items carry no assistant-written labels in this version (FR1.14 withdrawn).
+
+## Visual Design Canvas
+
+The screens below are drawn at high fidelity in the Claude Design canvas **[Dayboard daily page](https://claude.ai/artifact/VZztcfaVrbr35HDBmkX8uu)**. The canvas is private to its owner until it is shared from its Share menu. It uses the tokens in `design-system-mapping.md` and only made-up content.
+
+| Artboard | Screen here | What it shows |
+|---|---|---|
+| Day page · light | S1 | The populated day at desktop width. Interactive in Play: the meeting answers, the item switches, the Markdown checkboxes, the "2 done" fold and Copy prompt work; the date opens the calendar, "…" opens the remove artboard, and Dark switches to the dark artboard |
+| Day page · dark, just updated | S1, S6 Updated elsewhere | The same day in dark, with two changed items glowing and the "This day was updated" toast at the top right |
+| Phone width · 390 | S3, S6 Updated elsewhere | Controls on their own line under the text, 44 px targets, the toast at the bottom |
+| Calendar open | S2 | The floating calendar under the date; days without a page are muted, with a dash under the number |
+| Remove · menu and confirmation | S7 | The "…" menu with Remove block, then the confirmation over a dimmed page, focus on Cancel |
+| First run · no days yet | S4 | The centred card with Copy prompt |
+| States | S5, S6 | Loading, offline, day failed, no page for this day, empty block, block that can't be shown, the three toasts, Copied, Copy refused with the prompt, and a solid surface for reduced transparency |
 
 ## S1. Day page, populated (wide window)
 

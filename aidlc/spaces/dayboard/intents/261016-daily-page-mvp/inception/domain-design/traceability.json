@@ -1,0 +1,17 @@
+{
+  "stage": "domain-design",
+  "upstream_ids": ["US1.1", "US1.2", "US1.3", "US2.1", "US2.2", "US3.1", "US3.2", "US3.3", "US4.1", "US4.2", "US5.1"],
+  "coverage": [
+    { "id": "US1.1", "status": "OK", "target": "McpInterface, DayPages, Storage, RequestGuard" },
+    { "id": "US1.2", "status": "OK", "target": "McpInterface, CarryOver, DayPages, RequestGuard" },
+    { "id": "US1.3", "status": "OK", "target": "AppShell, PageText, ApiClient, RequestGuard, HttpInterface, DayPages" },
+    { "id": "US2.1", "status": "OK", "target": "DayView, MarkdownText, AppShell, ApiClient, RequestGuard, HttpInterface, DayPages, PageText" },
+    { "id": "US2.2", "status": "OK", "target": "LiveUpdates, Storage, RequestGuard, HttpInterface, LiveSync, DayView, ApiClient" },
+    { "id": "US3.1", "status": "OK", "target": "DayView, ApiClient, RequestGuard, HttpInterface, DayPages" },
+    { "id": "US3.2", "status": "OK", "target": "MarkdownText, DayView, ApiClient, RequestGuard, HttpInterface, DayPages" },
+    { "id": "US3.3", "status": "OK", "target": "McpInterface, RequestGuard, DayPages, Storage, LiveUpdates" },
+    { "id": "US4.1", "status": "OK", "target": "DayView, CarryOver, DayPages, RequestGuard, HttpInterface, ApiClient" },
+    { "id": "US4.2", "status": "OK", "target": "McpInterface, RequestGuard, CarryOver, DayPages" },
+    { "id": "US5.1", "status": "OK", "target": "DayNavigation, ApiClient, RequestGuard, HttpInterface, DayPages" }
+  ]
+}

@@ -9,7 +9,7 @@
 - **Start Date**: 2026-10-16T16:54:39Z
 - **Question Id**: 3953f6c3
 - **State Version**: 8
-- **Active Agent**: aidlc-design-agent
+- **Active Agent**: aidlc-architect-agent
 - **Worktree Path**:
 - **Bolt Refs**:
 - **Practices Affirmed Timestamp**: 2026-10-16T19:59:14Z
@@ -35,11 +35,11 @@
 
 ## Execution Plan Summary
 - **Total Stages**: 22
-- **Completed**: 10
-- **In Progress**: refined-mockups
+- **Completed**: 15
+- **In Progress**: functional-design
 
 ## Runtime State
-- **Revision Count**: 7
+- **Revision Count**: 16
 - **Construction Checkpoints**: enabled
 - **Construction Iteration**: unit-major
 - **Construction Execution**: serial
@@ -52,9 +52,16 @@
 
 
 
-- **Parked**: 2026-10-16T22:37:37Z
 
-- **Parked At Stage**: refined-mockups
+
+
+- **Construction Verification Command**: ( if [ -f dayboard-api/pyproject.toml ]; then cd dayboard-api && uv run ruff check . && uv run mypy . && uv run pytest --cov --cov-fail-under=80; fi ) && ( if [ -f dayboard-web/package.json ]; then cd dayboard-web && pnpm exec biome check . && pnpm exec tsc --noEmit && pnpm exec vitest run --coverage; fi )
+
+- **Unit Ownership**: team
+
+- **Parked**: 2026-10-17T03:20:51Z
+
+- **Parked At Stage**: functional-design
 
 - **Parked By**: person
 
@@ -63,8 +70,8 @@
 
 - **Initialization**: Verified
 - **Ideation**: Verified
-- **Inception**: Active
-- **Construction**: Pending
+- **Inception**: Verified
+- **Construction**: Active
 - **Operation**: Skipped
 
 ## Stage Progress
@@ -89,14 +96,14 @@
 - [x] practices-discovery — EXECUTE
 - [x] requirements-analysis — EXECUTE
 - [x] user-stories — EXECUTE
-- [-] refined-mockups — EXECUTE
-- [ ] domain-design — EXECUTE
-- [ ] units-generation — EXECUTE
-- [ ] contract-design — EXECUTE
-- [ ] delivery-planning — EXECUTE
+- [x] refined-mockups — EXECUTE
+- [x] domain-design — EXECUTE
+- [x] units-generation — EXECUTE
+- [x] contract-design — EXECUTE
+- [x] delivery-planning — EXECUTE
 
 ### CONSTRUCTION PHASE
-- [ ] functional-design — EXECUTE
+- [-] functional-design — EXECUTE
 - [ ] nfr-requirements — EXECUTE
 - [ ] nfr-design — EXECUTE
 - [ ] infrastructure-design — EXECUTE
@@ -113,14 +120,25 @@
 - [ ] performance-validation — SKIP
 - [ ] feedback-optimization — SKIP
 
+## Unit Progress
+<!-- Derived, engine-owned projection; routing ignores hand edits. -->
+| unit | owner | functional-design | nfr-requirements | nfr-design | infrastructure-design | code-generation | gate |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| u1-api-core | - | [ ] | [ ] | [ ] | [ ] | [ ] | [ ] |
+| u2-assistant-access | - | [ ] | [ ] | [ ] | [ ] | [ ] | [ ] |
+| u3-day-page | - | [ ] | [ ] | [ ] | [ ] | [ ] | [ ] |
+| u4-day-navigation | - | [ ] | [ ] | [ ] | [ ] | [ ] | [ ] |
+| u5-live-updates | - | [ ] | [ ] | [ ] | [ ] | [ ] | [ ] |
+| u6-installation | - | [x] | [ ] | [ ] | [ ] | [ ] | [-] |
+
 ## Current Status
-- **Lifecycle Phase**: INCEPTION
-- **Current Stage**: refined-mockups
-- **Next Stage**: domain-design
+- **Lifecycle Phase**: CONSTRUCTION
+- **Current Stage**: functional-design
+- **Next Stage**: nfr-requirements
 - **Status**: Running
-- **Last Updated**: 2026-10-16T22:37:37Z
+- **Last Updated**: 2026-10-17T03:20:51Z
 
 ## Session Resume Point
-- **Last Completed Stage**: user-stories
-- **Next Action**: Execute Refined Mockups
+- **Last Completed Stage**: delivery-planning
+- **Next Action**: Execute Functional Design
 - **Pending Artifacts**: none

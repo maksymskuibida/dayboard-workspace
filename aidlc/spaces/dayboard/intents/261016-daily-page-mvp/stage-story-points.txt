@@ -1,0 +1,5 @@
+# Story points per stage for the project panel; every stage not named here counts 1.
+default: 1
+requirements-analysis: 2
+refined-mockups: 3
+units-generation: 2

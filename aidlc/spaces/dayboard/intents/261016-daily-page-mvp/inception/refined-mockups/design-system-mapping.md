@@ -16,7 +16,8 @@ All text pairs below meet 4.5:1 against the surface they sit on, including the s
 | `color.tone.neutral` | bg `#E3E7EE`, text `#2B3240` | bg `#2A3140`, text `#D5DBE6` | "No answer", "Past" |
 | `color.tone.positive` | bg `#DDF3E6`, text `#14532D` | bg `#173A27`, text `#A7E8BF` | Yes |
 | `color.tone.caution` | bg `#FBEFD5`, text `#6B4500` | bg `#3D2F12`, text `#F5D38A` | Maybe |
-| `color.tone.negative` | bg `#FBE1E1`, text `#7F1D1D` | bg `#3F1C1F`, text `#F6B3B3` | No, Remove button |
+| `color.tone.negative` | bg `#FBE1E1`, text `#7F1D1D` | bg `#3F1C1F`, text `#F6B3B3` | No, Remove item in the "…" menu |
+| `color.danger.solid` | bg `#B42318`, text `#FFFFFF` | bg `#C93A2E`, text `#FFFFFF` | The Remove button in the confirmation, so the destructive action reads as final |
 
 ## Surfaces (glass levels)
 
@@ -75,7 +76,7 @@ With reduced motion asked for, every duration becomes 0 and the shimmer stops; t
 | StateSwitch | `glass.1` track | `meta` | selected: `accent` | `size.row` |
 | MeetingAnswer | `glass.1` track | `meta` | Yes `tone.positive`, No `tone.negative`, Maybe `tone.caution` | `size.row` |
 | Past mark | — | `meta` | `tone.neutral` chip, row text `text.muted` at full opacity | — |
-| MoreMenu, Calendar, Dialog | `glass.4` | `body`, `meta` | Remove: `tone.negative` | `radius.float` |
+| MoreMenu, Calendar, Dialog | `glass.4` | `body`, `meta` | menu Remove: `tone.negative` text; dialog Remove: `danger.solid` | `radius.float` |
 | Toast | `glass.4` | `meta` | `text.primary` | `radius.float` |
 | Change highlight | row tint | — | `accent` at 24% fading to 0 | — |
 | Markdown code | `glass.1` | `mono` | `text.primary` | `radius.chip` |
